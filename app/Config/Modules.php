@@ -6,7 +6,8 @@ class Modules {
         return [
             'Auth',
             'Dashboard',
-            'User'
+            'User',
+            'Api'
         ];
     }
 }
