@@ -107,7 +107,11 @@
                         <i class="bi bi-people"></i> Users
                     </a>
                     <?php endif; ?>
-                    
+
+                    <a href="/products" class="nav-link <?= str_starts_with($_SERVER['REQUEST_URI'], '/products') ? 'active' : '' ?>">
+                        <i class="bi bi-box-seam"></i> Products
+                    </a>
+
                     <a href="/profile" class="nav-link <?= $_SERVER['REQUEST_URI'] == '/profile' ? 'active' : '' ?>">
                         <i class="bi bi-person"></i> Profile
                     </a>
@@ -125,6 +129,7 @@
         </div>
     </div>
     
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
