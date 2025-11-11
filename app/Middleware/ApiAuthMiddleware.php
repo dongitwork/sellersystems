@@ -2,7 +2,8 @@
 
 namespace App\Middleware;
 
-use App\Core\BaseModel;
+use App\Config\Database;
+use Medoo\Medoo;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -11,11 +12,11 @@ use Slim\Psr7\Response;
 
 class ApiAuthMiddleware implements MiddlewareInterface
 {
-    private BaseModel $model;
+    private Medoo $db;
 
     public function __construct()
     {
-        $this->model = new BaseModel();
+        $this->db = Database::getInstance();
     }
 
     public function process(
@@ -41,7 +42,7 @@ class ApiAuthMiddleware implements MiddlewareInterface
         }
 
         // Find user by token
-        $user = $this->model->db()->get('users', '*', [
+        $user = $this->db->get('users', '*', [
             'api_token' => $token,
             'status' => 'active'
         ]);
@@ -51,7 +52,7 @@ class ApiAuthMiddleware implements MiddlewareInterface
         }
 
         // Get user roles
-        $roles = $this->model->db()->select('user_roles', [
+        $roles = $this->db->select('user_roles', [
             '[>]roles' => ['role_id' => 'id']
         ], [
             'roles.slug'
