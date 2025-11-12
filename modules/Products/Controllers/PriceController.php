@@ -9,6 +9,7 @@ use Modules\Products\Models\LoyaltyPrice;
 use Modules\Products\Models\LoyaltyTier;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use DI\Container;
 
 class PriceController extends BaseController
 {
@@ -17,13 +18,13 @@ class PriceController extends BaseController
     private LoyaltyPrice $loyaltyPriceModel;
     private LoyaltyTier $loyaltyTierModel;
 
-    public function __construct($container)
+    public function __construct(Container $container)
     {
         parent::__construct($container);
-        $this->productModel = new Product($this->db);
-        $this->priceModel = new ProductPrice($this->db);
-        $this->loyaltyPriceModel = new LoyaltyPrice($this->db);
-        $this->loyaltyTierModel = new LoyaltyTier($this->db);
+        $this->productModel = new Product();
+        $this->priceModel = new ProductPrice();
+        $this->loyaltyPriceModel = new LoyaltyPrice();
+        $this->loyaltyTierModel = new LoyaltyTier();
     }
 
     /**

@@ -7,17 +7,18 @@ use Modules\Products\Models\Product;
 use Modules\Products\Models\ProductColor;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use DI\Container;
 
 class ColorController extends BaseController
 {
     private Product $productModel;
     private ProductColor $colorModel;
 
-    public function __construct($container)
+    public function __construct(Container $container)
     {
         parent::__construct($container);
-        $this->productModel = new Product($this->db);
-        $this->colorModel = new ProductColor($this->db);
+        $this->productModel = new Product();
+        $this->colorModel = new ProductColor();
     }
 
     /**
