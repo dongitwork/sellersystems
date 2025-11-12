@@ -6,6 +6,7 @@ use DI\Container;
 use Modules\Products\Controllers\ProductController;
 use Modules\Products\Controllers\PriceController;
 use Modules\Products\Controllers\ColorController;
+use Modules\Products\Controllers\LoyaltyTierController;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\RoleMiddleware;
 
@@ -44,6 +45,14 @@ class Routes {
             $group->post('/{id}/colors', ColorController::class . ':store');
             $group->post('/colors/{color_id}/update', ColorController::class . ':update');
             $group->post('/colors/{color_id}/delete', ColorController::class . ':delete');
+
+            // Loyalty tier management
+            $group->get('/loyalty-tiers', LoyaltyTierController::class . ':index');
+            $group->post('/loyalty-tiers', LoyaltyTierController::class . ':store');
+            $group->get('/loyalty-tiers/{id}/edit', LoyaltyTierController::class . ':edit');
+            $group->post('/loyalty-tiers/{id}/update', LoyaltyTierController::class . ':update');
+            $group->post('/loyalty-tiers/{id}/delete', LoyaltyTierController::class . ':delete');
+            $group->post('/loyalty-tiers/{id}/toggle', LoyaltyTierController::class . ':toggleStatus');
         })->add(new AuthMiddleware());
     }
 }

@@ -296,15 +296,16 @@
 </div>
 
 <script>
+$(document).ready(function() {
     const productId = <?= $product['id'] ?>;
     let currentCell = null;
     let originalValue = null;
 
-    function openBasePriceModal() {
+    window.openBasePriceModal = function() {
         $('#basePriceForm')[0].reset();
     }
 
-    function saveBasePrice() {
+    window.saveBasePrice = function() {
         const formData = {
             size: $('#size').val(),
             price: $('#price').val(),
@@ -330,7 +331,7 @@
         });
     }
 
-    function deleteBasePrice(priceId) {
+    window.deleteBasePrice = function(priceId) {
         if (!confirm('Are you sure? This will also delete all loyalty prices for this size.')) {
             return;
         }
@@ -443,7 +444,7 @@
         currentCell = null;
     }
 
-    function copyBasePricesToLoyalty(tierId) {
+    window.copyBasePricesToLoyalty = function(tierId) {
         if (!confirm('Copy all base prices to this loyalty tier with automatic discount applied?')) {
             return;
         }
@@ -451,6 +452,60 @@
         // Get tier discount
         const tierDiscount = <?= json_encode(array_column($tiers, 'discount_percent', 'id')) ?>[tierId] || 0;
 
-        alert('This feature will be implemented in the next update. For now, please manually set loyalty prices.');
+        // Get base prices
+        const basePrices = <?= json_encode($product['prices']) ?>;
+
+        if (!basePrices || basePrices.length === 0) {
+            alert('No base prices to copy!');
+            return;
+        }
+
+        // Copy each base price to loyalty tier with discount
+        let copied = 0;
+        let errors = 0;
+
+        basePrices.forEach(function(basePrice) {
+            const discountMultiplier = (100 - tierDiscount) / 100;
+
+            const data = {
+                tier_id: tierId,
+                size: basePrice.size,
+                price: (parseFloat(basePrice.price) * discountMultiplier).toFixed(2),
+                extra_price: (parseFloat(basePrice.extra_price) * discountMultiplier).toFixed(2),
+                rush_fee: (parseFloat(basePrice.rush_fee) * discountMultiplier).toFixed(2),
+                shipping_fee: (parseFloat(basePrice.shipping_fee) * discountMultiplier).toFixed(2),
+                extra_shipping_fee: (parseFloat(basePrice.extra_shipping_fee) * discountMultiplier).toFixed(2),
+                priority_fee: (parseFloat(basePrice.priority_fee) * discountMultiplier).toFixed(2),
+                extra_priority_fee: (parseFloat(basePrice.extra_priority_fee) * discountMultiplier).toFixed(2),
+                label_fee: (parseFloat(basePrice.label_fee) * discountMultiplier).toFixed(2),
+                special_fee: (parseFloat(basePrice.special_fee) * discountMultiplier).toFixed(2)
+            };
+
+            $.ajax({
+                url: '/products/' + productId + '/loyalty-prices',
+                type: 'POST',
+                data: data,
+                async: false,
+                success: function(response) {
+                    if (response.success) {
+                        copied++;
+                    } else {
+                        errors++;
+                    }
+                },
+                error: function() {
+                    errors++;
+                }
+            });
+        });
+
+        if (errors > 0) {
+            alert('Copied ' + copied + ' prices with ' + errors + ' errors. Refreshing...');
+        } else {
+            alert('Successfully copied ' + copied + ' prices with ' + tierDiscount + '% discount applied!');
+        }
+
+        location.reload();
     }
+});
 </script>
