@@ -28,6 +28,14 @@ $containerBuilder->addDefinitions([
     \Modules\Dashboard\Controllers\DashboardController::class => DI\autowire()
         ->constructor(DI\get(DI\Container::class)),
     \Modules\User\Controllers\UserController::class => DI\autowire()
+        ->constructor(DI\get(DI\Container::class)),
+    \Modules\Products\Controllers\ProductController::class => DI\autowire()
+        ->constructor(DI\get(DI\Container::class)),
+    \Modules\Products\Controllers\PriceController::class => DI\autowire()
+        ->constructor(DI\get(DI\Container::class)),
+    \Modules\Products\Controllers\ColorController::class => DI\autowire()
+        ->constructor(DI\get(DI\Container::class)),
+    \Modules\Products\Controllers\LoyaltyTierController::class => DI\autowire()
         ->constructor(DI\get(DI\Container::class))
 ]);
 
