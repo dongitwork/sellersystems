@@ -44,7 +44,7 @@ class ProductController extends BaseController
         $brands = $this->productModel->getBrands();
         $categories = $this->productModel->getCategories();
 
-        return $this->render($response, 'modules/Products/Views/index.php', [
+        return $this->render($response, 'Products:index', [
             'products' => $result['data'],
             'pagination' => [
                 'page' => $result['page'],
@@ -71,7 +71,7 @@ class ProductController extends BaseController
             return $this->redirect($response, '/products');
         }
 
-        return $this->render($response, 'modules/Products/Views/show.php', [
+        return $this->render($response, 'Products:show', [
             'product' => $product
         ]);
     }

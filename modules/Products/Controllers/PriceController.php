@@ -46,7 +46,7 @@ class PriceController extends BaseController
         // Get loyalty prices grouped by tier
         $loyaltyPrices = $this->loyaltyPriceModel->getByProductGrouped($productId);
 
-        return $this->render($response, 'modules/Products/Views/prices.php', [
+        return $this->render($response, 'Products:prices', [
             'product' => $product,
             'tiers' => $tiers,
             'loyaltyPrices' => $loyaltyPrices
