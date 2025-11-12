@@ -41,15 +41,15 @@ class ProductController extends BaseController
         ];
 
         $result = $this->productModel->paginate($page, 15, $search, $filters);
-        $brands = $this->productModel->getBrands();
-        $categories = $this->productModel->getCategories();
+        $brands = $this->productModel->getBrands() ?: [];
+        $categories = $this->productModel->getCategories() ?: [];
 
         return $this->render($response, 'Products:index', [
-            'products' => $result['data'],
+            'products' => $result['data'] ?? [],
             'pagination' => [
-                'page' => $result['page'],
-                'totalPages' => $result['totalPages'],
-                'total' => $result['total']
+                'page' => $result['page'] ?? 1,
+                'totalPages' => $result['totalPages'] ?? 1,
+                'total' => $result['total'] ?? 0
             ],
             'brands' => $brands,
             'categories' => $categories,
